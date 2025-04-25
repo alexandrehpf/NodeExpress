@@ -8,4 +8,5 @@ async function conectaNaDatabase(){
 
 export default conectaNaDatabase;
 
-
+// Criar o arquivo .env na raiz do projeto com a seguinte variável de ambiente:
+//DB_CONNECTION_STRING=mongodb+srv://<usuario>:<senha>@c<host>/<banco>?retryWrites=true&w=majority&appName=Cluster0
