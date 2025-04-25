@@ -81,19 +81,8 @@ Exemplos de endpoints (dependendo dos modelos que você criou):
 
 ---
 
-## 💡 Contribuindo
-
-Pull requests são bem-vindos! Para mudanças maiores, por favor abra uma issue antes para discutir o que você gostaria de modificar.
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença [MIT](LICENSE).
-
----
 
 ## 👨‍💻 Autor
 
 Desenvolvido por **Alexandre Ferraz**  
-🔗 [LinkedIn](https://www.linkedin.com/in/alexandrehpf)
+🔗 [LinkedIn](https://www.linkedin.com/in/alexandre-ferraz-23549526/)
