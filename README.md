@@ -48,11 +48,10 @@ npm install
 
 ### 3. Configure o ambiente
 
-Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
+Crie um arquivo `.env` na raiz do projeto para configurar o acesso ao banco de dados. 
 
 ```env
-MONGODB_URI=your_mongodb_connection_string
-PORT=3000
+
 ```
 
 > 🔐 Dica: Nunca suba suas credenciais no GitHub. O `.env` está no `.gitignore`.
