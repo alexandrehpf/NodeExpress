@@ -1,17 +1,19 @@
 import mongoose from "mongoose";
+import ErroBase from "../erros/ErroBase.js";
+import RequisicaoIncorreta from "../erros/RequisicaoIncorreta.js";
+import ErroValidacao from "../erros/ErroValidacao.js";
+import NaoEcontrado from "../erros/NaoEncontrado.js";
 
 // eslint-disable-next-line no-unused-vars
 function manipuladorDeErros(erro, req, res, next) {
-  if(erro instanceof mongoose.CastError) {
-    res.status(400).json({ message: "Um ou mais dados fornecidos estão incorretos." });
+  if(erro instanceof mongoose.CastError || erro instanceof TypeError ) {
+    new RequisicaoIncorreta().enviarReposta(res);
   } else if(erro instanceof mongoose.Error.ValidationError) {
-    const mensagensErros = Object.values(erro.errors).map((erro) => erro.message).join("; ");
-    res.status(404).json({ message: `Os seguintes erros foram encontrados: ${mensagensErros}` });
-  } else if(erro instanceof TypeError) {
-    res.status(404).json({ message: "Autor não encontrado." });
-  } else{
-    console.log(erro);
-    res.status(500).json({ message: "Erro interno no servidor"});
+    new ErroValidacao(erro).enviarReposta(res);
+  } else if (erro instanceof NaoEcontrado) {
+    erro.enviarReposta(res);
+  }else{
+    new ErroBase().enviarReposta(res);
   }
 };
 
