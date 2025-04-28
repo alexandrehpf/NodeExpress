@@ -1,5 +1,5 @@
-import { autor } from "../models/Autor.js";
-import livro from "../models/Livro.js";
+import { autor } from "../models/index.js";
+import { livro } from "../models/index.js";
 import NaoEcontrado from "../erros/NaoEncontrado.js";
 
 class LivroController { 
@@ -58,7 +58,7 @@ class LivroController {
     try {
       const id = req.params.id;
       const livroEncontrado = await livro.findByIdAndDelete(id);
-      
+
       if (livroEncontrado !== null) {
         res.status(200).json({ message: "Livro excluído com sucesso" });
       } else{
