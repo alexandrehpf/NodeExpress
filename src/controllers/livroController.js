@@ -1,11 +1,13 @@
 import { autor, livro } from "../models/index.js";
 import NaoEcontrado from "../erros/NaoEncontrado.js";
 
+
 class LivroController { 
   static async listarLivros(req, res, next) {
     try {
-      const listaLivros = await livro.find({});
-      res.status(200).json(listaLivros);
+      const buscaLivros = livro.find();
+      req.resultado = buscaLivros;
+      next();
     } catch (error) {
       next(error);
     }
@@ -74,8 +76,10 @@ class LivroController {
       const busca = await processaBusca(req.query);
 
       if (busca !== null) {
-        const livrosPorEditora = await livro.find(busca);
-        res.status(200).json(livrosPorEditora);
+        const livrosResultado = livro
+          .find(busca);
+        req.resultado = livrosResultado;
+        next();
       } else{
         res.status(200).send([]);
       }
