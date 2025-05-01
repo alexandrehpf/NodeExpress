@@ -1,5 +1,4 @@
-import { autor } from "../models/index.js";
-import { livro } from "../models/index.js";
+import { autor, livro } from "../models/index.js";
 import NaoEcontrado from "../erros/NaoEncontrado.js";
 
 class LivroController { 
@@ -71,20 +70,52 @@ class LivroController {
 
   static async listarLivrosPorFiltro(req, res, next) {
     try {
-      const { editora, titulo } = req.query;
+     
+      const busca = await processaBusca(req.query);
 
-      console.log(editora, titulo);
+      if (busca !== null) {
+        const livrosPorEditora = await livro.find(busca);
+        res.status(200).json(livrosPorEditora);
+      } else{
+        res.status(200).send([]);
+      }
 
-      const busca = {};
-      if (editora) busca.editora = editora;
-      if (titulo) busca.titulo = titulo;
 
-      const livrosPorEditora = await livro.find(busca);
-      res.status(200).json(livrosPorEditora);
     } catch (error) {
       next(error);
     }
   }
 };
+
+async function processaBusca(parametros) { 
+
+  const { editora, titulo, minPaginas, maxPaginas, nomeAutor } = parametros;
+  let busca = {};
+
+  if (editora) busca.editora = { $regex: editora, $options: "i" };
+  if (titulo) busca.titulo = { $regex: titulo, $options: "i" };
+  if(minPaginas || maxPaginas) busca.numeroPaginas = {};
+
+  // $gte = Greater than or equal = Maior ou igual
+  if(minPaginas) busca.numeroPaginas.$gte = minPaginas;
+  // $lte = Less than or equal = Menor ou igual
+  if(maxPaginas) busca.numeroPaginas.$lte = maxPaginas;
+
+  // console.log(nomeAutor);
+  
+
+  if (nomeAutor) {
+
+    const autorEncontrado = await autor.findOne({ nome: { $regex: nomeAutor, $options: "i" } });
+    if (autorEncontrado !== null) {
+      //Mas para buscar por campos dentro de objetos embutidos no MongoDB, você precisa usar notação de caminho (dot notation), como:
+      busca["autor.nome"] = { $regex: nomeAutor, $options: "i" };
+    } else {
+      busca = null;
+    }
+  }
+
+  return busca;
+}
 
 export default LivroController;
